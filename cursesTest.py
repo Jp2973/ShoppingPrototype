@@ -1,7 +1,5 @@
 import curses, sys
 
-from numpy import delete
-
 from Views.Welcome import WelcomeView
 
 def handleWelcome(stdscr):

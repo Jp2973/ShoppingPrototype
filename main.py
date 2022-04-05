@@ -1,9 +1,9 @@
-from .curses import cursesTest
-from .basic import basicTest
+from cursesTest import cursesTest
+from basicTest import basicTest
 
 def main():
     while 1:
-        choice = input("For a basic test of functionality input B, to try Curses input C, to exit input X").lower()
+        choice = input("For a basic test of functionality input B, to try Curses input C, to exit input X: ").lower()
         if (choice == "b"):
             basicTest()
         elif (choice == "c"):
