@@ -1,3 +1,4 @@
-from .View import View
-from .Welcome import WelcomeView
-from .Login import LoginView
+from .Register import registerView
+from .Login import loginView
+from .Menu import menuView
+from .Welcome import welcomeView

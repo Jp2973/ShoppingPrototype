@@ -9,14 +9,10 @@ class InventoryItem(Base):
     quantity = Column(Integer)
     title = Column(String)
     description = Column(String)
+    genre = Column(String)
     price = Column(Float)
     item_type = Column(String)
 
     book_reference = Column(Integer, ForeignKey("Book.id"))
     movie_reference = Column(Integer, ForeignKey("Movie.id"))
     
-    def __str__(self):
-        return self.title
-    
-    def __repr__(self):
-        return self.title
