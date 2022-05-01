@@ -72,5 +72,27 @@ CREATE TABLE CartItem (
     FOREIGN KEY(item_id) REFERENCES InventoryItem(item_id)
 );
 
+CREATE TABLE Order (
+    order_id integer PRIMARY KEY,
+    subtotal real,
+    total real,
+    user_id integer,
+    address_id integer,
+    payment_id integer,
+    FOREIGN KEY(user_id) REFERENCES Customer(id)
+    FOREIGN KEY(address_id) REFERENCES Address(address_id),
+    FOREIGN KEY(payment_id) REFERENCES PaymentInfo(payment_id)
+);
+
+CREATE TABLE OrderItem (
+    id integer PRIMARY KEY,
+    subtotal real,
+    quantity integer,
+    order_id integer,
+    item_id integer,
+    FOREIGN KEY(order_id) REFERENCES Order(order_id),
+    FOREIGN KEY(item_id) REFERENCES InventoryItem(item_id)
+);
+
 INSERT INTO Book (author, publisher, isbn) VALUES ("John Doe", "Wholehouse", "10928901");
 INSERT INTO InventoryItem (quantity, title, description, genre, price, item_type, book_reference) VALUES (7, "Generic Title", "Generic Description", "Generic Genre", 20.70, "B", 1)

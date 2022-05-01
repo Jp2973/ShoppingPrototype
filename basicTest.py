@@ -1,6 +1,6 @@
 import sqlite3, os, sys
 
-from Classes import Customer, Book
+from Models import Customer, Book
 from Controllers.BooksController import getAllBooks
 
 def welcomeView():

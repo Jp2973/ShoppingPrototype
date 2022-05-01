@@ -1,5 +1,5 @@
-from Helpers.sql import getDatabase
-from Classes.Book import Book
+from Helpers.sql_helper import getDatabase
+from Models.Book import Book
 
 def getAllBooks():
     dbConnection = getDatabase()
