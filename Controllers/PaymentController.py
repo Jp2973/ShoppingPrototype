@@ -1,4 +1,4 @@
-from Models import Address, Customer, PaymentInfo
+from Models import Address, Customer, PaymentInfo, Order
 from Helpers import getSession
 
 def newPaymentInfo(card_number, cvv, expiration) -> PaymentInfo:
@@ -22,6 +22,6 @@ def attatchAddressToPayment(payment: PaymentInfo, address: Address) -> None:
 
 def deletePaymentInfo(payment: PaymentInfo):
     session = getSession()
-    session.query(Address).filter_by(address_id=payment.billing_address_id).delete()
-    session.query(PaymentInfo).filter_by(payment_id=payment.payment_id).delete()
-    session.commit()
+    if (not session.query(Order).filter_by(payment_id=payment.payment_id).all()):
+        session.delete(session.query(PaymentInfo).filter_by(payment_id=payment.payment_id).first())
+        session.commit()

@@ -1,22 +1,30 @@
 import sys
 from .Cart import cartView
-from Controllers import getAllBooks, getAllMovies, getUserCart, updateCartItem
+from .Table import tableView
+from Controllers import getAllBooks, getAllMovies, getUserCart, updateCartItem, getCurrentCartQuantity
+from Helpers import flattenEntries
 import Helpers.state as state
 
 def storeView():
     books = getAllBooks()
-    print(books)
     movies = getAllMovies()
     while 1:
         print("STORE:")
         print("Please Select From The Following Options:\n[b] - view our books\n[m] - view our movies\n[a] - add an item to your cart\n[c] - manage and view your cart\n[r] - return\n[x] - Exit\n")
         option = input("Your Input: ").lower()
         if option == "b":
-            [print(f"{index}: {b.InventoryItem.title} by {b.Book.author}") for index, b in enumerate(books)]
+            if(len(books) > 0):
+                flatBooks = flattenEntries(books)
+                headers = [(key, key.replace("_", " ").title()) for key in ["title", "author", "genre", "publisher", "price", "quantity"]]
+                tableView(headers, flatBooks, index = True)
+
         elif option == "m":
-            [print(f"{index}: {m.InventoryItem.title} by {m.Movie.director}") for index, m in enumerate(movies)]
+            if(len(movies) > 0):
+                flatMovies = flattenEntries(movies)
+                headers = [(key, key.replace("_", " ").title()) for key in ["title", "director", "leading_actor", "genre", "price", "quantity"]]
+                tableView(headers, flatMovies, index = True)
+
         elif option == "a":
-            print(state.user_state)
             cart = getUserCart(state.user_state)
             if not cart:
                 print("There was a problem retrieving your cart")
@@ -40,9 +48,14 @@ def storeView():
                 print("Item quantity must be an integer.")
                 continue
             if itemQuantity < 0 or itemQuantity > item.InventoryItem.quantity:
-                print(f"We're sorry but that's an invalid number of items. We currently have {item.InventoryItem.quantity} of {item.InventoryItem.title}")
+                print(f"We're sorry but that's an invalid number of items. We currently have {item.InventoryItem.quantity} of {item.InventoryItem.title} in our inventory.")
                 continue
-            updateCartItem(cart, item, itemQuantity)
+            cartQuantity = getCurrentCartQuantity(cart, item.InventoryItem)
+            updateCartItem(cart, item, itemQuantity+cartQuantity)
+            if itemType == "b":
+                books = getAllBooks()
+            elif itemType == "m":
+                movies = getAllMovies()
 
         elif option == "c":
             cartView()

@@ -16,8 +16,7 @@ def paymentView() -> PaymentInfo:
         elif option != 'n':
             print("Invalid selection returning to previous menu.")
             return None
-    
-    print("\tNew payment info: ")
+
     card_number = input("\tCard Number: ")
     try:
         cvv = int(input("\tCVV: "))
@@ -26,12 +25,13 @@ def paymentView() -> PaymentInfo:
         return None
     try:
         expiration_month = int(input("\tExpiration Month: "))
-        expiration_year = int(input("\tExpiration Month: "))
+        expiration_year = int(input("\tExpiration Yeare: "))
         expiration = datetime.date(year=expiration_year, month=expiration_month, day=1)
     except:
         print("Month and Year should be in numercal form.")
         return None
 
+    print("Billing Address: ")
     billingAddress = addressView()
     if billingAddress:
         createdPaymentInfo = newPaymentInfo(card_number, cvv, expiration)
@@ -43,7 +43,6 @@ def paymentView() -> PaymentInfo:
                 if paymentInfo:
                     deletePaymentInfo(paymentInfo)
             
-            #Remove old payment info
             return createdPaymentInfo
     
     print("Invalid Billing Address.")

@@ -23,7 +23,7 @@ def cartView():
                 tempAddress = addressView()
                 option = input("\tWould you like to save the new address [y]: ").lower()
                 if (tempAddress and option == "y"):
-                    updateShippingAddress(state.user_state, shippingAddress, tempAddress)
+                    updateShippingAddress(state.user_state, tempAddress)
                 shippingAddress = tempAddress
             print("Payment Info: ")
             paymentOption = paymentView()

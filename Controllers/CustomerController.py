@@ -1,4 +1,5 @@
 import hashlib
+from .CartController import deleteUserCart
 
 from Models import Address, Customer, PaymentInfo, ShoppingCart
 from Helpers import getSession
@@ -70,3 +71,16 @@ def updateShippingAddress(user: Customer, newAddress: Address):
         oldAddress.delete()
     session.query(Customer).filter_by(id=user.id).update({"shipping_address_id": newAddress.address_id})
     session.commit()
+
+def deleteUser(user: Customer) -> bool:
+    session = getSession()
+    if (deleteUserCart(user)):
+        print("Cart")
+        userFromQuery = session.query(Customer).filter_by(id=user.id).first()
+        session.delete(userFromQuery)
+        session.commit()
+
+        return True
+    print("Not")
+    return False
+
