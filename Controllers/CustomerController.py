@@ -4,10 +4,31 @@ from Models import Address, Customer, PaymentInfo, ShoppingCart
 from Helpers import getSession
 
 def checkPassword(customer: Customer, password: str) -> bool:
-        return customer.password_hash == hashPassword(password)
+    return customer and customer.password_hash == hashPassword(password)
 
 def hashPassword(password: str) -> str:
-        return hashlib.sha256(password.encode('utf_8')).hexdigest()
+    return hashlib.sha256(password.encode('utf_8')).hexdigest()
+
+def updatePassword(user: Customer, oldPassword: str, newPassword: str) -> bool:
+    session = getSession()
+    userQuery = session.query(Customer).filter_by(id=user.id)
+    if(checkPassword(userQuery.first(), oldPassword)):
+        userQuery.update({"password_hash": hashPassword(newPassword)})
+        session.commit()
+        return True
+    
+    return False
+
+def updateName(user: Customer, name: str) -> bool:
+    session = getSession()
+    userQuery = session.query(Customer).filter_by(id=user.id)
+    if(userQuery.first()):
+        userQuery.update({"name": name})
+        session.commit()
+        return True
+    
+    return False
+
 
 def login(username: str, password: str) -> Customer:
     session = getSession()
@@ -19,14 +40,13 @@ def login(username: str, password: str) -> Customer:
 def register(name: str, username: str, password: str) -> Customer:
     session = getSession()
     userResult = session.query(Customer).filter_by(username=username).first()
-    print(userResult)
     if not userResult:
         customerInstance = Customer(name=name, username=username, password_hash=hashPassword(password))
         session.add(customerInstance)
         session.commit()
 
         customer = session.query(Customer).filter_by(username=username).first()
-        session.add(ShoppingCart(user_id=customer.id))
+        session.add(ShoppingCart(user_id=customer.id, total=0))
         session.commit()
         
         return session.query(Customer).filter_by(username=username).first()
@@ -43,8 +63,10 @@ def getShippingAddress(user: Customer) -> Address:
     session = getSession()
     return session.query(Address).filter_by(address_id=user.shipping_address_id).first()
 
-def replaceShippingAddress(user: Customer, oldAddress: Address, newAddress: Address):
+def updateShippingAddress(user: Customer, newAddress: Address):
     session = getSession()
-    session.query(Address).filter_by(address_id=oldAddress.address_id).delete()
+    oldAddress = session.query(Address).filter_by(address_id=user.shipping_address_id)
+    if (oldAddress.first()):
+        oldAddress.delete()
     session.query(Customer).filter_by(id=user.id).update({"shipping_address_id": newAddress.address_id})
     session.commit()
