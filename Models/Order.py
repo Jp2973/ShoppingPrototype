@@ -11,7 +11,7 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("Customer.id"))
     address_id = Column(Integer, ForeignKey("Address.address_id"))
     payment_id = Column(Integer, ForeignKey("PaymentInfo.payment_id"))
-    items = relationship("OrderItem", cascade="all, delete", passive_deletes=True)
+    items = relationship("OrderItem", cascade="all,delete", backref="order")
 
 
 

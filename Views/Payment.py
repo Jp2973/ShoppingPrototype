@@ -10,14 +10,14 @@ from .Address import addressView
 def paymentView() -> PaymentInfo:
     paymentInfo = getPaymentInfo(state.user_state)
     if paymentInfo:
-        option = input(f"Would you like to use the card ending in {paymentInfo.card_number[-4:]} y/n: ").lower()
+        option = input(f"\tWould you like to use the card ending in {paymentInfo.card_number[-4:]} y/n: ").lower()
         if option == 'y':
             return paymentInfo
         elif option != 'n':
             print("Invalid selection returning to previous menu.")
             return None
     
-    print("New payment info: ")
+    print("\tNew payment info: ")
     card_number = input("\tCard Number: ")
     try:
         cvv = int(input("\tCVV: "))

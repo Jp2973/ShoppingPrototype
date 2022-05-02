@@ -27,11 +27,9 @@ def updateCartItem(cart: ShoppingCart, item: InventoryItem, quantity: int):
 
 def resetUserCart(user: Customer) -> bool:
     session = getSession()
-    try:
-        session.query(ShoppingCart).filter_by(user_id=user.id).delete()
-        session.add(ShoppingCart(user_id=user.id, subtotal=0, total=0))
-        session.commit()
-        return True
-    except:
-        return False
-
+    oldCart = session.query(ShoppingCart).filter_by(user_id=user.id).first()
+    if oldCart:
+        session.delete(oldCart)
+    session.add(ShoppingCart(user_id=user.id, subtotal=0, total=0))
+    session.commit()
+    return True
