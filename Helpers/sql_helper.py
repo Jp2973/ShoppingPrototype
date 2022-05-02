@@ -84,5 +84,5 @@ def printTables():
     print("Addresses: \n", addresses)
 
 if __name__ == "__main__":
-    #createDatabase()
+    createDatabase()
     printTables()
