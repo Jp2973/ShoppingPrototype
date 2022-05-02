@@ -1,4 +1,4 @@
 from Models.Customer import Customer
 
-user_state: Customer | None = None
+user_state: Customer = None
 

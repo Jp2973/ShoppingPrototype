@@ -67,28 +67,10 @@ def flattenEntries(entryTouples):
 def dropTables():
     Base.metadata.drop_all(bind=engine)
 
-def printTables():
-    books = pd.read_sql_table(table_name="Book", con=engine)
-    movies = pd.read_sql_table(table_name="Movie", con=engine)
-    items = pd.read_sql_table(table_name="InventoryItem", con=engine)
-    carts = pd.read_sql_table(table_name="ShoppingCart", con=engine)
-    cartItems = pd.read_sql_table(table_name="CartItem", con=engine)
-    orders = pd.read_sql_table(table_name="Order", con=engine)
-    orderItems = pd.read_sql_table(table_name="OrderItem", con=engine)
-    customers = pd.read_sql_table(table_name="Customer", con=engine)
-    paymentInfos = pd.read_sql_table(table_name="PaymentInfo", con=engine)
-    addresses = pd.read_sql_table(table_name="Address", con=engine)   
-    
-    print("Books: \n", books)
-    print("Items: \n", items)
-    print("Carts: \n", carts)
-    print("CartItems: \n", cartItems)
-    print("Orders: \n", orders)
-    print("OrderItems: \n", orderItems)
-    print("Customers: \n", customers)
-    print("PaymentInfo: \n", paymentInfos)
-    print("Addresses: \n", addresses)
+def printTables(tables = ["Book", "Movie", "InventoryItem", "ShoppingCart", "CartItem", "Order", "OrderItem", "Customer", "PaymentInfo", "Address"]):
+    [print (f"{table} \n{pd.read_sql_table(table_name=table, con=engine)}") for table in tables]
+
 
 if __name__ == "__main__":
-    createDatabase()
+    #createDatabase()
     printTables()

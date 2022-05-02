@@ -1,13 +1,15 @@
 import sys
 from .Cart import cartView
-from Controllers import getAllBooks, getAllMovies, getUserCart, updateCartItem
+from .Table import tableView
+from Controllers import getAllBooks, getAllMovies, getUserCart, updateCartItem, getCurrentCartQuantity
 from Helpers import flattenEntries
 import Helpers.state as state
 
 def storeView():
     books = getAllBooks()
     print(books)
-    print(flattenEntries(books))
+    flat = flattenEntries(books)
+    tableView([(key,key) for key in flat[0].keys()], flat)
     movies = getAllMovies()
     while 1:
         print("STORE:")
@@ -18,7 +20,6 @@ def storeView():
         elif option == "m":
             [print(f"{index}: {m.InventoryItem.title} by {m.Movie.director}") for index, m in enumerate(movies)]
         elif option == "a":
-            print(state.user_state)
             cart = getUserCart(state.user_state)
             if not cart:
                 print("There was a problem retrieving your cart")
@@ -42,9 +43,10 @@ def storeView():
                 print("Item quantity must be an integer.")
                 continue
             if itemQuantity < 0 or itemQuantity > item.InventoryItem.quantity:
-                print(f"We're sorry but that's an invalid number of items. We currently have {item.InventoryItem.quantity} of {item.InventoryItem.title}")
+                print(f"We're sorry but that's an invalid number of items. We currently have {item.InventoryItem.quantity} of {item.InventoryItem.title} in our inventory.")
                 continue
-            updateCartItem(cart, item, itemQuantity)
+            cartQuantity = getCurrentCartQuantity(cart, item.InventoryItem)
+            updateCartItem(cart, item, itemQuantity+cartQuantity)
 
         elif option == "c":
             cartView()

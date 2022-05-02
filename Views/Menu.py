@@ -15,7 +15,8 @@ def menuView():
         if option == "s":
             storeView()
         elif option == "a":
-            accountView()
+            if (accountView()):
+                return
         elif option == "o":
             orderView()
         elif option == "l":

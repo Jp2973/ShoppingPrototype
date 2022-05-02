@@ -11,8 +11,12 @@ class Customer(Base):
     username = Column(String)
     password_hash = Column(String)
 
+    shippingAddress = relationship("Address", cascade="all,delete", backref="user")
     shipping_address_id = Column(Integer, ForeignKey("Address.address_id"))
+    paymentInformation = relationship("PaymentInfo", cascade="all,delete", backref="user")
     payment_information_id = Column(Integer, ForeignKey("PaymentInfo.payment_id"))
+
+    orders = relationship("Order", cascade="all,delete", backref="user")
     
         
     
