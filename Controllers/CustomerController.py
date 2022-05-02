@@ -46,7 +46,7 @@ def register(name: str, username: str, password: str) -> Customer:
         session.commit()
 
         customer = session.query(Customer).filter_by(username=username).first()
-        session.add(ShoppingCart(user_id=customer.id))
+        session.add(ShoppingCart(user_id=customer.id, total=0))
         session.commit()
         
         return session.query(Customer).filter_by(username=username).first()

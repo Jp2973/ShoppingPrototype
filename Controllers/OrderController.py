@@ -7,7 +7,7 @@ def getAllOrders(user: Customer):
 
 def newOrderFromCart(cart: ShoppingCart, shippingAddress: Address, payment: PaymentInfo) -> Order:
     session = getSession()
-    orderInstance = Order(subtotal=cart.subtotal, total=cart.total, user_id=cart.user_id, address_id=shippingAddress.address_id, payment_id=payment.payment_id)
+    orderInstance = Order(total=cart.total, user_id=cart.user_id, address_id=shippingAddress.address_id, payment_id=payment.payment_id)
 
     session.add(orderInstance)
     session.commit()

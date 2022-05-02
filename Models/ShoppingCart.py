@@ -6,7 +6,6 @@ from .Base import Base
 class ShoppingCart(Base):
     __tablename__ = "ShoppingCart"
     cart_id = Column(Integer, primary_key=True)
-    subtotal = Column(Float)
     total = Column(Float)
     user_id = Column(Integer, ForeignKey("Customer.id"))
     items = relationship("CartItem", cascade="all,delete", backref="cart")
