@@ -6,7 +6,7 @@ def getUserCart(user: Customer) -> ShoppingCart:
     session = getSession()
     return session.query(ShoppingCart).filter_by(user_id=user.id).first()
 
-def getItemsInCart(cart: ShoppingCart) -> list[CartItem]:
+def getItemsInCart(cart: ShoppingCart):
     session = getSession()
     return session.query(CartItem).filter_by(cart_id=cart.cart_id).all()
 
