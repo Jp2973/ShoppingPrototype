@@ -72,7 +72,7 @@ def printTables():
     customers = pd.read_sql_table(table_name="Customer", con=engine)
     paymentInfos = pd.read_sql_table(table_name="PaymentInfo", con=engine)
     addresses = pd.read_sql_table(table_name="Address", con=engine)   
-    t
+    
     print("Books: \n", books)
     print("Items: \n", items)
     print("Carts: \n", carts)
