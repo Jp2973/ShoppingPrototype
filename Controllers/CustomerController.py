@@ -1,6 +1,6 @@
 import hashlib
 
-from Models import Customer, ShoppingCart
+from Models import Address, Customer, PaymentInfo, ShoppingCart
 from Helpers import getSession
 
 def checkPassword(customer: Customer, password: str) -> bool:
@@ -33,3 +33,18 @@ def register(name: str, username: str, password: str) -> Customer:
         
 
     return None
+
+def attatchPaymentInfoToUser(user: Customer, payment: PaymentInfo) -> None:
+    session = getSession()
+    session.query(Customer).filter_by(id=user.id).update({"payment_information_id": payment.payment_id})
+    session.commit()
+
+def getShippingAddress(user: Customer) -> Address:
+    session = getSession()
+    return session.query(Address).filter_by(address_id=user.shipping_address_id).first()
+
+def replaceShippingAddress(user: Customer, oldAddress: Address, newAddress: Address):
+    session = getSession()
+    session.query(Address).filter_by(address_id=oldAddress.address_id).delete()
+    session.query(Customer).filter_by(id=user.id).update({"shipping_address_id": newAddress.address_id})
+    session.commit()
