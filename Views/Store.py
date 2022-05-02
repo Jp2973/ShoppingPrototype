@@ -1,11 +1,13 @@
 import sys
 from .Cart import cartView
 from Controllers import getAllBooks, getAllMovies, getUserCart, updateCartItem
+from Helpers import flattenEntries
 import Helpers.state as state
 
 def storeView():
     books = getAllBooks()
     print(books)
+    print(flattenEntries(books))
     movies = getAllMovies()
     while 1:
         print("STORE:")

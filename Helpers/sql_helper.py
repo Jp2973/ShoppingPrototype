@@ -35,6 +35,12 @@ def getSession():
     Base.metadata.create_all(bind=engine)
     return _SESSION()
 
+def _objectToDict(object):
+    return {col.key: getattr(object, col.key) for col in inspect(object).mapper.column_attrs}
+
+def flattenEntries(entryTouples):
+    return [{**_objectToDict(a), **_objectToDict(b)} for a, b in entryTouples]
+
 def dropTables():
     Base.metadata.drop_all(bind=engine)
 
