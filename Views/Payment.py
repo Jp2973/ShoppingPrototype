@@ -43,7 +43,6 @@ def paymentView() -> PaymentInfo:
                 if paymentInfo:
                     deletePaymentInfo(paymentInfo)
             
-            #Remove old payment info
             return createdPaymentInfo
     
     print("Invalid Billing Address.")

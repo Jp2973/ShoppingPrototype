@@ -7,18 +7,23 @@ import Helpers.state as state
 
 def storeView():
     books = getAllBooks()
-    print(books)
-    flat = flattenEntries(books)
-    tableView([(key,key) for key in flat[0].keys()], flat)
     movies = getAllMovies()
     while 1:
         print("STORE:")
         print("Please Select From The Following Options:\n[b] - view our books\n[m] - view our movies\n[a] - add an item to your cart\n[c] - manage and view your cart\n[r] - return\n[x] - Exit\n")
         option = input("Your Input: ").lower()
         if option == "b":
-            [print(f"{index}: {b.InventoryItem.title} by {b.Book.author}") for index, b in enumerate(books)]
+            if(len(books) > 0):
+                flatBooks = flattenEntries(books)
+                headers = [(key, key.replace("_", " ").title()) for key in ["title", "author", "genre", "publisher", "price", "quantity"]]
+                tableView(headers, flatBooks, index = True)
+
         elif option == "m":
-            [print(f"{index}: {m.InventoryItem.title} by {m.Movie.director}") for index, m in enumerate(movies)]
+            if(len(movies) > 0):
+                flatMovies = flattenEntries(movies)
+                headers = [(key, key.replace("_", " ").title()) for key in ["title", "director", "leading_actor", "genre", "price", "quantity"]]
+                tableView(headers, flatMovies, index = True)
+
         elif option == "a":
             cart = getUserCart(state.user_state)
             if not cart:
@@ -47,6 +52,10 @@ def storeView():
                 continue
             cartQuantity = getCurrentCartQuantity(cart, item.InventoryItem)
             updateCartItem(cart, item, itemQuantity+cartQuantity)
+            if itemType == "b":
+                books = getAllBooks()
+            elif itemType == "m":
+                movies = getAllMovies()
 
         elif option == "c":
             cartView()
