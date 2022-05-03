@@ -14,6 +14,6 @@ class CartItem(Base):
     __tablename__ = "CartItem"
     id = Column(Integer, primary_key=True)
     subtotal = Column(Float)
-    quantity = Column(Integer)
+    item_quantity = Column(Integer)
     cart_id = Column(Integer, ForeignKey("ShoppingCart.cart_id"))
     item_id = Column(Integer, ForeignKey("InventoryItem.item_id"))

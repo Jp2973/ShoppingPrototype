@@ -19,6 +19,6 @@ class OrderItem(Base):
     __tablename__ = "OrderItem"
     id = Column(Integer, primary_key=True)
     subtotal = Column(Float)
-    quantity = Column(Integer)
+    item_quantity = Column(Integer)
     order_id = Column(Integer, ForeignKey("Order.order_id"))
     item_id = Column(Integer, ForeignKey("InventoryItem.item_id"))

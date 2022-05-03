@@ -22,7 +22,7 @@ def createBook(bookInfo):
     session.commit()
 
     book = session.query(Book).filter_by(isbn=bookInfo["isbn"]).first()
-    itemInstance = InventoryItem(quantity=bookInfo["quantity"], title=bookInfo["title"], description=bookInfo["description"], genre=bookInfo["genre"], price=bookInfo["price"], item_type="B", book_reference=book.id)
+    itemInstance = InventoryItem(inv_quantity=bookInfo["quantity"], title=bookInfo["title"], description=bookInfo["description"], genre=bookInfo["genre"], price=bookInfo["price"], item_type="B", book_reference=book.id)
     session.add(itemInstance)
     session.commit()
 
@@ -34,7 +34,7 @@ def createMovie(movieInfo):
 
     session.refresh(movieInstance)
 
-    itemInstance = InventoryItem(quantity=movieInfo["quantity"], title=movieInfo["title"], description=movieInfo["description"], genre=movieInfo["genre"], price=movieInfo["price"], item_type="M", movie_reference=movieInstance.id)
+    itemInstance = InventoryItem(inv_quantity=movieInfo["quantity"], title=movieInfo["title"], description=movieInfo["description"], genre=movieInfo["genre"], price=movieInfo["price"], item_type="M", movie_reference=movieInstance.id)
     session.add(itemInstance)
     session.commit()
 
@@ -62,7 +62,11 @@ def _objectToDict(object):
     return {col.key: getattr(object, col.key) for col in inspect(object).mapper.column_attrs}
 
 def flattenEntries(entryTouples):
-    return [{**_objectToDict(a), **_objectToDict(b)} for a, b in entryTouples]
+    if (entryTouples and len(entryTouples)>0):
+        if (len(entryTouples[0]) == 3):
+            return [{**_objectToDict(a), **_objectToDict(b), **_objectToDict(c)} for a, b, c in entryTouples]
+        elif (len(entryTouples[0]) == 2):
+            return [{**_objectToDict(a), **_objectToDict(b)} for a, b in entryTouples]
 
 def dropTables():
     Base.metadata.drop_all(bind=engine)
@@ -72,5 +76,5 @@ def printTables(tables = ["Book", "Movie", "InventoryItem", "ShoppingCart", "Car
 
 
 if __name__ == "__main__":
-    #createDatabase()
+    createDatabase()
     printTables()

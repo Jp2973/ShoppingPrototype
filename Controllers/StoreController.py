@@ -3,9 +3,9 @@ from Models import Book, InventoryItem, Movie
 
 def getAllBooks():
     session = getSession()
-    return session.query(InventoryItem, Book).join(Book, InventoryItem.book_reference == Book.id).all()
+    return session.query(InventoryItem, Book).filter_by(item_type="B").join(Book, InventoryItem.book_reference == Book.id).all()
 
 def getAllMovies():
     session = getSession()
-    return session.query(InventoryItem, Movie).join(Movie, InventoryItem.book_reference == Movie.id).all()
+    return session.query(InventoryItem, Movie).filter_by(item_type="M").join(Movie, InventoryItem.movie_reference == Movie.id).all()
 

@@ -1,6 +1,6 @@
 import sys
 from .Cart import cartView
-from .Table import tableView
+from .Table import tableView, createHeaders
 from Controllers import getAllBooks, getAllMovies, getUserCart, updateCartItem, getCurrentCartQuantity
 from Helpers import flattenEntries
 import Helpers.state as state
@@ -15,13 +15,13 @@ def storeView():
         if option == "b":
             if(len(books) > 0):
                 flatBooks = flattenEntries(books)
-                headers = [(key, key.replace("_", " ").title()) for key in ["title", "author", "genre", "publisher", "price", "quantity"]]
+                headers = createHeaders(["title", "author", "genre", "publisher", "price", "inv_quantity"])
                 tableView(headers, flatBooks, index = True)
 
         elif option == "m":
             if(len(movies) > 0):
                 flatMovies = flattenEntries(movies)
-                headers = [(key, key.replace("_", " ").title()) for key in ["title", "director", "leading_actor", "genre", "price", "quantity"]]
+                headers = createHeaders(["title", "director", "leading_actor", "genre", "price", "inv_quantity"])
                 tableView(headers, flatMovies, index = True)
 
         elif option == "a":
@@ -29,26 +29,27 @@ def storeView():
             if not cart:
                 print("There was a problem retrieving your cart")
                 continue
-            itemType = input("Would you like to add a [b]ook or [m]ovie: ").lower()
+            itemType = input("\tWould you like to add a [b]ook or [m]ovie: ").lower()
             if itemType not in ["b", "m"]:
                 print("Invalid type please enter b/m")
                 continue
             try:
-                itemIndex = int(input(f"Please enter the number for the {'book' if itemType == 'b' else 'movie'} you'd like to add to your cart: "))
+                itemIndex = int(input(f"\tPlease enter the number for the {'book' if itemType == 'b' else 'movie'} you'd like to add to your cart: "))
                 if itemType == "b":
                     item = books[itemIndex]
-                else:
+                elif itemType == "m":
+                    print("MOVIES", movies)
                     item = movies[itemIndex]
             except:
                 print(f"There is no {'book' if itemType == 'b' else 'movie'} #{itemIndex}")
                 continue
             try:
-                itemQuantity = int(input(f"How many {item.InventoryItem.title}s would you like to purchase: "))
+                itemQuantity = int(input(f"\tHow many {item.InventoryItem.title}s would you like to purchase: "))
             except:
                 print("Item quantity must be an integer.")
                 continue
-            if itemQuantity < 0 or itemQuantity > item.InventoryItem.quantity:
-                print(f"We're sorry but that's an invalid number of items. We currently have {item.InventoryItem.quantity} of {item.InventoryItem.title} in our inventory.")
+            if itemQuantity < 0 or itemQuantity > item.InventoryItem.inv_quantity:
+                print(f"We're sorry but that's an invalid number of items. We currently have {item.InventoryItem.inv_quantity} of {item.InventoryItem.title} in our inventory.")
                 continue
             cartQuantity = getCurrentCartQuantity(cart, item.InventoryItem)
             updateCartItem(cart, item, itemQuantity+cartQuantity)
@@ -59,6 +60,8 @@ def storeView():
 
         elif option == "c":
             cartView()
+            books = getAllBooks()
+            movies = getAllMovies()
         elif option == "r":
             return
         elif option == "x":

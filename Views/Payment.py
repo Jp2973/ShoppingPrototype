@@ -25,7 +25,7 @@ def paymentView() -> PaymentInfo:
         return None
     try:
         expiration_month = int(input("\tExpiration Month: "))
-        expiration_year = int(input("\tExpiration Yeare: "))
+        expiration_year = int(input("\tExpiration Year: "))
         expiration = datetime.date(year=expiration_year, month=expiration_month, day=1)
     except:
         print("Month and Year should be in numercal form.")
